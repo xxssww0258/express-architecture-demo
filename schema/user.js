@@ -35,6 +35,11 @@ userSchema.index({ account: 1 })
 // userSchema.virtual('updatedAtTimestamp').get(function () {
 //     return new Date(this.updatedAt).getTime()
 // })
+userSchema.static.getMeta = async function (currentPage, pageSize) {
+    let totalCount = await this.find({}).count()
+    let pageTotal = Math.ceil(totalCount / pageSize)
+    return { pageSize, currentPage, totalCount, pageTotal }
+}
 
 module.exports = mongoose.model('user', userSchema)
     .on('index', function (error) {
